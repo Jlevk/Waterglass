@@ -1,15 +1,14 @@
 package by.Jlevk.fragments
 
-import android.content.SharedPreferences
 import  android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import by.Jlevk.R
+import androidx.appcompat.app.AppCompatActivity
 
-class SettingsFragment : Fragment(){
-
+class SettingsFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -17,11 +16,8 @@ class SettingsFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_settings, container, false)
-    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
+    }
 
 }

@@ -1,17 +1,14 @@
 package by.Jlevk
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import by.Jlevk.fragments.SettingsFragment
 import by.Jlevk.fragments.WaterFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,8 +41,16 @@ class MainActivity : AppCompatActivity() {
         tvResult = findViewById(R.id.tvResult)
         tvResult?.text =  weight.toString()
 
-
     }
+
+    /*
+        private lateinit var binding: ActivityMainBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)*/
+
     fun ClickAdd(view: View){
         //повышение счетчика
         weight++
@@ -62,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         editor?.apply()
 
     }
+
     fun deleteAll(){
         val editor = pref?.edit()
         editor?.clear()
@@ -71,13 +77,13 @@ class MainActivity : AppCompatActivity() {
         tvResult?.text =  weight.toString()
 
     }
+
     fun ClickClear(view: View){
         deleteAll()
 
     }
 
-
-    private fun replaceFragment(fragment: Fragment) {
+    fun replaceFragment(fragment: Fragment) {
         //изменение экранов
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, fragment)

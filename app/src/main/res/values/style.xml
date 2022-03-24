@@ -4,4 +4,7 @@
         <item name = "colorPrimaryDark">#005cb2</item>
         <item name = "colorAccent">#6ab7ff</item>
    </style>
+    <style name="CustomNumberPickerTheme" parent="AppTheme">
+        <item name="colorControlNormal">@android:color/transparent</item>
+    </style>
 </resources>
