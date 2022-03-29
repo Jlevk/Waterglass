@@ -1,13 +1,18 @@
 package by.Jlevk
 
 import android.os.Bundle
+import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import by.Jlevk.databinding.ActivityMainBinding
 import by.Jlevk.fragments.SettingsFragment
 import by.Jlevk.fragments.WaterFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
+
+    private val dataModel: DataModel by viewModels()
 
     private val waterFragment = WaterFragment()
     private val settingsFragment = SettingsFragment()
@@ -17,10 +22,13 @@ class MainActivity : AppCompatActivity() {
     var pref: SharedPreferences? = null
     var tvResult: TextView? = null
     */
+private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         supportFragmentManager.beginTransaction()
             .add(R.id.fragment_container, WaterFragment())
@@ -31,7 +39,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.ic_water -> replaceFragment(waterFragment)
                 R.id.ic_settings -> replaceFragment(settingsFragment)
             }
-           true
+            true
+        }
+        dataModel.message.observe(this) {
+            binding.textView.text = it.toString()
+
         }
 
 /*
@@ -42,9 +54,8 @@ class MainActivity : AppCompatActivity() {
 
  */
 
-    }
 
-    /*
+        /*
         private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,12 +96,14 @@ class MainActivity : AppCompatActivity() {
     }
 
      */
-
-    fun replaceFragment(fragment: Fragment) {
-        //изменение экранов
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment)
-        transaction.commit()
     }
+
+        fun replaceFragment(fragment: Fragment) {
+            //изменение экранов
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container, fragment)
+            transaction.commit()
+        }
+
 
 }
