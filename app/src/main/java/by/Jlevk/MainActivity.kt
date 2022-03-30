@@ -5,6 +5,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import by.Jlevk.databinding.ActivityMainBinding
 import by.Jlevk.fragments.SettingsFragment
 import by.Jlevk.fragments.WaterFragment
@@ -16,12 +17,12 @@ class MainActivity : AppCompatActivity() {
 
     private val waterFragment = WaterFragment()
     private val settingsFragment = SettingsFragment()
-/*
+
     var weight = 0
 
-    var pref: SharedPreferences? = null
+
     var tvResult: TextView? = null
-    */
+
 private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,10 +42,14 @@ private lateinit var binding: ActivityMainBinding
             }
             true
         }
-        dataModel.message.observe(this) {
-            binding.textView.text = it.toString()
+        dataModel.weightValue.observe(this) {
+
+            weight = it
+            binding.textView.text = weight.toString()
 
         }
+
+
 
 /*
         pref = getSharedPreferences("TABLE", MODE_PRIVATE)

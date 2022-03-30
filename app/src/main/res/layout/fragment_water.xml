@@ -29,4 +29,30 @@
         app:layout_constraintTop_toTopOf="@+id/ic_water"
         app:layout_constraintVertical_bias="0.199" />
 
+    <Button
+        android:id="@+id/drink"
+        android:layout_width="153dp"
+        android:layout_height="78dp"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:icon="@drawable/ic_water"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.849"
+        android:text="Drink!" />
+
+    <TextView
+        android:id="@+id/percent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.675"
+        app:layout_constraintStart_toEndOf="@+id/dayWater"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.199" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
