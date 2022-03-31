@@ -7,4 +7,11 @@ open class DataModel: ViewModel() {
     val weightValue: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>()
     }
+    val progress: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
+    val percent: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
+
 }

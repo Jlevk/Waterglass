@@ -14,10 +14,10 @@ import androidx.lifecycle.LifecycleOwner
 import by.Jlevk.DataModel
 import by.Jlevk.databinding.FragmentWaterBinding
 
-class WaterFragment : Fragment(){
+class WaterFragment : Fragment() {
 
     private var _binding: FragmentWaterBinding? = null
-    private  val binding get() = _binding!!
+    private val binding get() = _binding!!
     private val dataModel: DataModel by activityViewModels()
 
     var weight = 0
@@ -35,43 +35,61 @@ class WaterFragment : Fragment(){
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        dataModel.weightValue.observe(activity as LifecycleOwner) {
-
-            weight = it
-            binding.dayWater.text = weight.toString()
-
-        }
-
         var percent: TextView = binding.percent
         var weightValue: TextView = binding.dayWater
 
         var dayProgress = 0
         var dayDrinked = 0
 
-        weight = 45
-
-        var dayWater = (weight*35)
 
         var button: Button = binding.drink
-        button.setOnClickListener() {
 
-            if(dayDrinked == 0 )
-                dayDrinked = 250
+        dataModel.progress.observe(activity as LifecycleOwner) {
 
-            else{
-                dayDrinked += 250}
+            dayDrinked= it
+            binding.dayDrinked.text = dayDrinked.toString()
 
-            dayProgress = (dayDrinked/dayWater)*100
 
-            weightValue.text = "Выпито: $dayDrinked мл"
+        }
+        dataModel.percent.observe(activity as LifecycleOwner) {
 
-            percent.text = "Прогресс: $dayProgress %"
+            dayProgress = it
+            binding.dayProgress.text = dayProgress.toString()
+
+
+        }
+        dataModel.weightValue.observe(activity as LifecycleOwner) {
+
+            weight = it
+            binding.dayWater.text = weight.toString()
+
+            button.setOnClickListener {
+                var dayWater = (weight * 35)
+
+                if (dayDrinked == 0) {
+                    dayDrinked = 250
+                    dataModel.progress.value = dayDrinked
+                } else {
+                    dayDrinked += 250
+                    dataModel.progress.value = dayDrinked
+                }
+
+                dayProgress = (dayDrinked / dayWater) * 100
+                dataModel.percent.value = dayProgress
+
+                weightValue.text = "Выпито: $dayDrinked мл"
+
+                percent.text = "Прогресс: $dayProgress %"
+
+            }
+
 
         }
 
-    }
 
+    }
 }
+
+
 
 

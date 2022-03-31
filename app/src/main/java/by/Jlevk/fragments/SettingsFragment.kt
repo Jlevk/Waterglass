@@ -54,15 +54,14 @@ class SettingsFragment : Fragment() {
             weight = newVal
             weightValue.text = "Ваша масса: $weight кг"
 
-            saveData(weight)
-
             dataModel.weightValue.value = weight
 
         }
+        saveData(weight)
 
     }
 
-    private fun saveData(res: Int){
+    fun saveData(res: Int){
         //сохранение в файле
         val editor = pref?.edit()
         editor?.putInt("weight", res)

@@ -1,6 +1,8 @@
 package by.Jlevk
 
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,10 +20,13 @@ class MainActivity : AppCompatActivity() {
     private val waterFragment = WaterFragment()
     private val settingsFragment = SettingsFragment()
 
-    var weight = 0
-
-
     var tvResult: TextView? = null
+
+    var weight = 0
+    var dayProgress = 0
+    var dayDrinked = 0
+
+    var pref: SharedPreferences? = null
 
 private lateinit var binding: ActivityMainBinding
 
@@ -42,23 +47,41 @@ private lateinit var binding: ActivityMainBinding
             }
             true
         }
+
+        pref = getSharedPreferences("TABLE", MODE_PRIVATE)
         dataModel.weightValue.observe(this) {
 
             weight = it
             binding.textView.text = weight.toString()
+            saveData(weight)
+
+        }
+        dataModel.progress.observe(this) {
+
+            dayDrinked= it
+            binding.textView.text = weight.toString()
+            saveWater(dayDrinked)
+
+        }
+        dataModel.percent.observe(this) {
+
+            dayProgress = it
+            binding.textView.text = weight.toString()
+            savePercent(dayProgress)
 
         }
 
+        weight=pref?.getInt("weight",0)!!
+        dayDrinked=pref?.getInt("water",0)!!
+        dayProgress=pref?.getInt("percent",0)!!
 
+        dataModel.weightValue.value = weight
+        dataModel.progress.value = dayDrinked
+        dataModel.percent.value = dayProgress
 
-/*
-        pref = getSharedPreferences("TABLE", MODE_PRIVATE)
-        weight=pref?.getInt(" weight",0)!!
-        tvResult = findViewById(R.id.tvResult)
-        tvResult?.text =  weight.toString(
+        binding.textView.text = weight.toString()
 
- */
-
+    }
 
         /*
         private lateinit var binding: ActivityMainBinding
@@ -76,31 +99,28 @@ private lateinit var binding: ActivityMainBinding
         saveData(weight)
 
     }
+         */
 
     fun saveData(res: Int){
         //сохранение в файле
         val editor = pref?.edit()
-        editor?.putInt(" weight", res)
+        editor?.putInt("weight", res)
         editor?.apply()
 
     }
-
-    fun deleteAll(){
+    fun saveWater(res: Int){
+        //сохранение в файле
         val editor = pref?.edit()
-        editor?.clear()
+        editor?.putInt("water", res)
         editor?.apply()
-        weight=0
-        tvResult = findViewById(R.id.tvResult)
-        tvResult?.text =  weight.toString()
 
     }
+    fun savePercent(res: Int){
+        //сохранение в файле
+        val editor = pref?.edit()
+        editor?.putInt("percent", res)
+        editor?.apply()
 
-    fun ClickClear(view: View){
-        deleteAll()
-
-    }
-
-     */
     }
 
         fun replaceFragment(fragment: Fragment) {
@@ -109,6 +129,7 @@ private lateinit var binding: ActivityMainBinding
             transaction.replace(R.id.fragment_container, fragment)
             transaction.commit()
         }
+
 
 
 }
