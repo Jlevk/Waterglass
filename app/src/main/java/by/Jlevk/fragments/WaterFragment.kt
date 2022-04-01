@@ -1,7 +1,5 @@
 package by.Jlevk.fragments
 
-import android.content.Context
-import android.content.SharedPreferences
 import  android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,10 +15,12 @@ import by.Jlevk.databinding.FragmentWaterBinding
 class WaterFragment : Fragment() {
 
     private var _binding: FragmentWaterBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding ?: throw RuntimeException("Binding call after view is destroyed")
     private val dataModel: DataModel by activityViewModels()
 
     var weight = 0
+    var dayProgress = 0
+    var dayDrinked = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,35 +35,29 @@ class WaterFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         var percent: TextView = binding.percent
-        var weightValue: TextView = binding.dayWater
-
-        var dayProgress = 0
-        var dayDrinked = 0
-
-
+        var water: TextView = binding.dayWater
         var button: Button = binding.drink
 
         dataModel.progress.observe(activity as LifecycleOwner) {
 
             dayDrinked= it
-            binding.dayDrinked.text = dayDrinked.toString()
-
+            water.text = "Выпито: $dayDrinked мл"
 
         }
         dataModel.percent.observe(activity as LifecycleOwner) {
 
             dayProgress = it
-            binding.dayProgress.text = dayProgress.toString()
-
+            percent.text = "Прогресс: $dayProgress %"
 
         }
         dataModel.weightValue.observe(activity as LifecycleOwner) {
 
             weight = it
-            binding.dayWater.text = weight.toString()
+        }
 
-            button.setOnClickListener {
+        button.setOnClickListener {
                 var dayWater = (weight * 35)
 
                 if (dayDrinked == 0) {
@@ -77,16 +71,17 @@ class WaterFragment : Fragment() {
                 dayProgress = (dayDrinked / dayWater) * 100
                 dataModel.percent.value = dayProgress
 
-                weightValue.text = "Выпито: $dayDrinked мл"
+                water.text = "Выпито: $dayDrinked мл"
 
                 percent.text = "Прогресс: $dayProgress %"
 
-            }
-
-
         }
 
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
 

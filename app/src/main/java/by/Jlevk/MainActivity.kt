@@ -100,6 +100,17 @@ private lateinit var binding: ActivityMainBinding
 
     }
          */
+    fun next(view: View){
+            weight = 0
+            dayDrinked = 0
+            dayProgress = 0
+            saveData(weight)
+            saveData(dayDrinked)
+            saveData(dayProgress)
+            dataModel.weightValue.value = weight
+            dataModel.progress.value = dayDrinked
+            dataModel.percent.value = dayProgress
+    }
 
     fun saveData(res: Int){
         //сохранение в файле

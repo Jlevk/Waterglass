@@ -22,6 +22,7 @@
         android:id="@+id/dayWater"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Выпито: "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.235"
@@ -33,6 +34,7 @@
         android:id="@+id/drink"
         android:layout_width="153dp"
         android:layout_height="78dp"
+        android:text="Drink!"
         android:textColor="@color/white"
         android:textSize="20dp"
         app:icon="@drawable/ic_water"
@@ -40,14 +42,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.849"
-        android:text="Drink!" />
+        app:layout_constraintVertical_bias="0.727" />
 
     <TextView
         android:id="@+id/percent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="Прогресс: "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.773"
@@ -55,27 +56,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.199" />
 
-    <TextView
-        android:id="@+id/dayDrinked"
-        android:layout_width="59dp"
-        android:layout_height="15dp"
-        android:text="dayDrinked"
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="150dp"
+        android:layout_height="51dp"
+        android:onClick="next"
+        android:text="New Day!"
+        app:icon="@drawable/ic_newday"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.198"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.502" />
-
-    <TextView
-        android:id="@+id/dayProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="dayProgress"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.821"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintVertical_bias="0.837" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
