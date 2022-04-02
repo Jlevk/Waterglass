@@ -11,6 +11,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import by.Jlevk.DataModel
 import by.Jlevk.databinding.FragmentWaterBinding
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.round
+import kotlin.math.roundToLong
 
 class WaterFragment : Fragment() {
 
@@ -19,8 +23,9 @@ class WaterFragment : Fragment() {
     private val dataModel: DataModel by activityViewModels()
 
     var weight = 0
-    var dayProgress = 0
     var dayDrinked = 0
+    var dayProgress = 0
+    var glass = 250
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,13 +48,13 @@ class WaterFragment : Fragment() {
         dataModel.progress.observe(activity as LifecycleOwner) {
 
             dayDrinked= it
-            water.text = "Выпито: $dayDrinked мл"
+            water.text = "Drunk water: $dayDrinked ml"
 
         }
         dataModel.percent.observe(activity as LifecycleOwner) {
 
             dayProgress = it
-            percent.text = "Прогресс: $dayProgress %"
+            percent.text = "Progress: $dayProgress %"
 
         }
         dataModel.weightValue.observe(activity as LifecycleOwner) {
@@ -58,24 +63,27 @@ class WaterFragment : Fragment() {
         }
 
         button.setOnClickListener {
-                var dayWater = (weight * 35)
+            var dayWater = (weight * 31)
 
-                if (dayDrinked == 0) {
-                    dayDrinked = 250
-                    dataModel.progress.value = dayDrinked
-                } else {
-                    dayDrinked += 250
-                    dataModel.progress.value = dayDrinked
-                }
+            if (dayDrinked == 0) {
 
-                dayProgress = (dayDrinked / dayWater) * 100
+                dayDrinked = glass
+                dataModel.progress.value = dayDrinked
+            }
+            else {
+
+                dayDrinked += glass
+                dataModel.progress.value = dayDrinked
+            }
+                dayProgress = (dayDrinked*100 / dayWater)
                 dataModel.percent.value = dayProgress
 
-                water.text = "Выпито: $dayDrinked мл"
-
-                percent.text = "Прогресс: $dayProgress %"
+                water.text = "Drunk water: $dayDrinked ml"
+                percent.text = "Progress: $dayProgress %"
 
         }
+        //добавить визуализацию прогресса
+
 
     }
 

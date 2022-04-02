@@ -101,10 +101,9 @@ private lateinit var binding: ActivityMainBinding
     }
          */
     fun next(view: View){
-            weight = 0
+
             dayDrinked = 0
             dayProgress = 0
-            saveData(weight)
             saveData(dayDrinked)
             saveData(dayProgress)
             dataModel.weightValue.value = weight

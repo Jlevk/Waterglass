@@ -39,7 +39,7 @@ class SettingsFragment : Fragment() {
         var weightValue: TextView = binding.weightValue
         var num: NumberPicker = binding.numberPicker
 
-        weightValue.text = "Ваша масса: $weight кг"
+        weightValue.text = "Your weight: $weight кг"
 
         num.minValue = 0
         num.maxValue = 400
@@ -52,7 +52,7 @@ class SettingsFragment : Fragment() {
         num.setOnValueChangedListener { picker, oldVal, newVal ->
 
             weight = newVal
-            weightValue.text = "Ваша масса: $weight кг"
+            weightValue.text = "Your weight: $weight кг"
 
             dataModel.weightValue.value = weight
 
