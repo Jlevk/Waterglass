@@ -1,8 +1,5 @@
 package by.Jlevk.fragments
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +8,11 @@ import android.widget.NumberPicker
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
 import by.Jlevk.DataModel
 import by.Jlevk.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
-
-    var pref: SharedPreferences? = null
 
     private var _binding: FragmentSettingsBinding? = null
     private  val binding get() = _binding!!
@@ -39,15 +35,15 @@ class SettingsFragment : Fragment() {
         var weightValue: TextView = binding.weightValue
         var num: NumberPicker = binding.numberPicker
 
-        weightValue.text = "Your weight: $weight кг"
-
         num.minValue = 0
         num.maxValue = 400
         num.wrapSelectorWheel = false
 
-        var pref : SharedPreferences?= activity?.getPreferences(MODE_PRIVATE)
+        dataModel.weightValue.observe(activity as LifecycleOwner) {
 
-        weight=pref?.getInt("weight", 0)!!
+            weight = it
+            weightValue.text = "Your weight: $weight кг"
+        }
 
         num.setOnValueChangedListener { picker, oldVal, newVal ->
 
@@ -57,15 +53,6 @@ class SettingsFragment : Fragment() {
             dataModel.weightValue.value = weight
 
         }
-        saveData(weight)
-
-    }
-
-    fun saveData(res: Int){
-        //сохранение в файле
-        val editor = pref?.edit()
-        editor?.putInt("weight", res)
-        editor?.apply()
 
     }
 

@@ -1,8 +1,11 @@
 package by.Jlevk
 
+import android.animation.ObjectAnimator
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -81,6 +84,7 @@ private lateinit var binding: ActivityMainBinding
 
         binding.textView.text = weight.toString()
 
+
     }
 
         /*
@@ -100,15 +104,15 @@ private lateinit var binding: ActivityMainBinding
 
     }
          */
+
     fun next(view: View){
 
-            dayDrinked = 0
-            dayProgress = 0
-            saveData(dayDrinked)
-            saveData(dayProgress)
-            dataModel.weightValue.value = weight
-            dataModel.progress.value = dayDrinked
-            dataModel.percent.value = dayProgress
+        dayDrinked = 0
+        dayProgress = 0
+        saveWater(dayDrinked)
+        savePercent(dayProgress)
+        dataModel.progress.value = dayDrinked
+        dataModel.percent.value = dayProgress
     }
 
     fun saveData(res: Int){
@@ -133,13 +137,11 @@ private lateinit var binding: ActivityMainBinding
 
     }
 
-        fun replaceFragment(fragment: Fragment) {
-            //изменение экранов
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, fragment)
-            transaction.commit()
-        }
-
-
+    fun replaceFragment(fragment: Fragment) {
+        //изменение экранов
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, fragment)
+        transaction.commit()
+    }
 
 }

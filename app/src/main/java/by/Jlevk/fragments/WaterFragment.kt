@@ -1,20 +1,18 @@
 package by.Jlevk.fragments
 
+import android.animation.ObjectAnimator
 import  android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import by.Jlevk.DataModel
 import by.Jlevk.databinding.FragmentWaterBinding
-import kotlin.math.ceil
-import kotlin.math.floor
-import kotlin.math.round
-import kotlin.math.roundToLong
 
 class WaterFragment : Fragment() {
 
@@ -26,6 +24,8 @@ class WaterFragment : Fragment() {
     var dayDrinked = 0
     var dayProgress = 0
     var glass = 250
+
+    var progressBar: ProgressBar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +41,7 @@ class WaterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        progressBar = binding.water
         var percent: TextView = binding.percent
         var water: TextView = binding.dayWater
         var button: Button = binding.drink
@@ -55,8 +56,12 @@ class WaterFragment : Fragment() {
 
             dayProgress = it
             percent.text = "Progress: $dayProgress %"
+            ObjectAnimator.ofInt(progressBar, "progress", dayProgress)
+                .setDuration(1500)
+                .start()
 
         }
+
         dataModel.weightValue.observe(activity as LifecycleOwner) {
 
             weight = it
@@ -78,13 +83,19 @@ class WaterFragment : Fragment() {
                 dayProgress = (dayDrinked*100 / dayWater)
                 dataModel.percent.value = dayProgress
 
+
+                progressBar?.max = 100
+                val currentProgress = dayProgress
+                ObjectAnimator.ofInt(progressBar, "progress", currentProgress)
+                    .setDuration(1500)
+                    .start()
+
+
                 water.text = "Drunk water: $dayDrinked ml"
                 percent.text = "Progress: $dayProgress %"
 
         }
         //добавить визуализацию прогресса
-
-
     }
 
     override fun onDestroyView() {
