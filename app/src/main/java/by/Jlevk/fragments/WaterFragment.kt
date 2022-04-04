@@ -23,6 +23,7 @@ class WaterFragment : Fragment() {
     var weight = 0
     var dayDrinked = 0
     var dayProgress = 0
+    var progressAnim = 0
     var glass = 250
 
     var progressBar: ProgressBar? = null
@@ -56,8 +57,11 @@ class WaterFragment : Fragment() {
 
             dayProgress = it
             percent.text = "Progress: $dayProgress %"
-            ObjectAnimator.ofInt(progressBar, "progress", dayProgress)
-                .setDuration(1500)
+
+            progressAnim = dayProgress*10
+            progressBar?.max = 1000
+            ObjectAnimator.ofInt(progressBar, "progress", progressAnim)
+                .setDuration(2000)
                 .start()
 
         }
@@ -82,14 +86,6 @@ class WaterFragment : Fragment() {
             }
                 dayProgress = (dayDrinked*100 / dayWater)
                 dataModel.percent.value = dayProgress
-
-
-                progressBar?.max = 100
-                val currentProgress = dayProgress
-                ObjectAnimator.ofInt(progressBar, "progress", currentProgress)
-                    .setDuration(1500)
-                    .start()
-
 
                 water.text = "Drunk water: $dayDrinked ml"
                 percent.text = "Progress: $dayProgress %"
