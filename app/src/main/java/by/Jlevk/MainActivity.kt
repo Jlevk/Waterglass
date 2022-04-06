@@ -1,16 +1,18 @@
 package by.Jlevk
 
-import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.SharedPreferences
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import by.Jlevk.databinding.ActivityMainBinding
 import by.Jlevk.fragments.SettingsFragment
 import by.Jlevk.fragments.WaterFragment
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     var dayDrinked = 0
 
     var pref: SharedPreferences? = null
+
 
 private lateinit var binding: ActivityMainBinding
 
@@ -84,6 +87,24 @@ private lateinit var binding: ActivityMainBinding
 
         binding.textView.text = weight.toString()
 
+        val manager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        val sensor = manager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+        val sListener = object : SensorEventListener{
+            override fun onSensorChanged(sEvent: SensorEvent?) {
+                val value = sEvent?.values
+                val progressBar: ProgressBar = findViewById(R.id.water)
+                var s = value?.get(0)
+                if (s != null && s>-15 && s<25) {
+                    progressBar.rotation = (-s+10)
+                }
+
+            }
+
+            override fun onAccuracyChanged(sEvent: Sensor?, p1: Int) {
+
+            }
+        }
+        manager.registerListener(sListener, sensor, SensorManager.SENSOR_DELAY_GAME)
 
     }
 
