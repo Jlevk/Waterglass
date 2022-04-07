@@ -21,18 +21,22 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : AppCompatActivity() {
 
     private val dataModel: DataModel by viewModels()
-
     private val waterFragment = WaterFragment()
     private val settingsFragment = SettingsFragment()
+    var pref: SharedPreferences? = null
 
-    var tvResult: TextView? = null
+    var progressBar: ProgressBar? = null
 
     var weight = 0
     var dayProgress = 0
     var dayDrinked = 0
 
-    var pref: SharedPreferences? = null
+    private var magnetic = FloatArray(9)
+    private var gravity = FloatArray(9)
 
+    private var accelerometer = FloatArray(3)
+    private var magnfield = FloatArray(3)
+    private var values = FloatArray(3)
 
 private lateinit var binding: ActivityMainBinding
 
@@ -65,14 +69,12 @@ private lateinit var binding: ActivityMainBinding
         dataModel.progress.observe(this) {
 
             dayDrinked= it
-            binding.textView.text = weight.toString()
             saveWater(dayDrinked)
 
         }
         dataModel.percent.observe(this) {
 
             dayProgress = it
-            binding.textView.text = weight.toString()
             savePercent(dayProgress)
 
         }
@@ -85,46 +87,46 @@ private lateinit var binding: ActivityMainBinding
         dataModel.progress.value = dayDrinked
         dataModel.percent.value = dayProgress
 
-        binding.textView.text = weight.toString()
-
         val manager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        val sensor = manager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-        val sListener = object : SensorEventListener{
-            override fun onSensorChanged(sEvent: SensorEvent?) {
-                val value = sEvent?.values
-                val progressBar: ProgressBar = findViewById(R.id.water)
-                var s = value?.get(0)
-                if (s != null && s>-15 && s<25) {
-                    progressBar.rotation = (-s+10)
-                }
+        val accel = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        val magnet = manager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
 
+        val sListener = object : SensorEventListener{
+            override fun onSensorChanged(event: SensorEvent?) {
+                when(event?.sensor?.type){
+                    Sensor.TYPE_ACCELEROMETER->accelerometer = event.values.clone()
+                    Sensor.TYPE_MAGNETIC_FIELD->magnfield = event.values.clone()
+                }
+                SensorManager.getRotationMatrix(gravity, magnetic, accelerometer, magnfield)
+                var outGravity = FloatArray(9)
+                SensorManager.remapCoordinateSystem(gravity,
+                    SensorManager.AXIS_X,
+                    SensorManager.AXIS_Z,
+                    outGravity
+                )
+
+                SensorManager.getOrientation(outGravity, values)
+
+                progressBar = findViewById(R.id.water)
+                var y = values[1] *  57.29577951308
+                var z = values[0] *  57.29577951308
+                var x = (values[2] * (-57.29577951308)).toFloat()
+                if (y>76) x=0f
+                if (x>-13 && x<13) {
+                    binding.textView.text = x.toString()
+                    progressBar?.rotation = x
+                }
             }
 
-            override fun onAccuracyChanged(sEvent: Sensor?, p1: Int) {
+
+            override fun onAccuracyChanged(event: Sensor?, p1: Int) {
 
             }
         }
-        manager.registerListener(sListener, sensor, SensorManager.SENSOR_DELAY_GAME)
+        manager.registerListener(sListener, magnet, SensorManager.SENSOR_DELAY_FASTEST)
+        manager.registerListener(sListener, accel, SensorManager.SENSOR_DELAY_FASTEST)
 
     }
-
-        /*
-        private lateinit var binding: ActivityMainBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-
-    fun ClickAdd(view: View){
-        //повышение счетчика
-        weight++
-        tvResult = findViewById(R.id.tvResult)
-        tvResult?.text =  weight.toString()
-        saveData(weight)
-
-    }
-         */
 
     fun next(view: View){
 
