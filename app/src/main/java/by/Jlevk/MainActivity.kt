@@ -9,8 +9,8 @@ import android.hardware.SensorManager
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import by.Jlevk.databinding.ActivityMainBinding
@@ -24,21 +24,14 @@ class MainActivity : AppCompatActivity() {
     private val waterFragment = WaterFragment()
     private val settingsFragment = SettingsFragment()
     var pref: SharedPreferences? = null
-
     var progressBar: ProgressBar? = null
 
     var weight = 0
     var dayProgress = 0
-    var dayDrinked = 0
+    var dayDrunk = 0
+    var glass = 0
 
-    private var magnetic = FloatArray(9)
-    private var gravity = FloatArray(9)
-
-    private var accelerometer = FloatArray(3)
-    private var magnfield = FloatArray(3)
-    private var values = FloatArray(3)
-
-private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,8 +61,8 @@ private lateinit var binding: ActivityMainBinding
         }
         dataModel.progress.observe(this) {
 
-            dayDrinked= it
-            saveWater(dayDrinked)
+            dayDrunk= it
+            saveWater(dayDrunk)
 
         }
         dataModel.percent.observe(this) {
@@ -78,63 +71,74 @@ private lateinit var binding: ActivityMainBinding
             savePercent(dayProgress)
 
         }
+        dataModel.glass.observe(this) {
+
+            glass = it
+            saveGlass(glass)
+
+        }
 
         weight=pref?.getInt("weight",0)!!
-        dayDrinked=pref?.getInt("water",0)!!
+        dayDrunk=pref?.getInt("water",0)!!
         dayProgress=pref?.getInt("percent",0)!!
+        glass=pref?.getInt("glass",0)!!
 
         dataModel.weightValue.value = weight
-        dataModel.progress.value = dayDrinked
+        dataModel.progress.value = dayDrunk
         dataModel.percent.value = dayProgress
+        dataModel.glass.value = glass
 
         val manager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        val accel = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        val magnet = manager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-
-        val sListener = object : SensorEventListener{
-            override fun onSensorChanged(event: SensorEvent?) {
-                when(event?.sensor?.type){
-                    Sensor.TYPE_ACCELEROMETER->accelerometer = event.values.clone()
-                    Sensor.TYPE_MAGNETIC_FIELD->magnfield = event.values.clone()
-                }
-                SensorManager.getRotationMatrix(gravity, magnetic, accelerometer, magnfield)
-                var outGravity = FloatArray(9)
-                SensorManager.remapCoordinateSystem(gravity,
-                    SensorManager.AXIS_X,
-                    SensorManager.AXIS_Z,
-                    outGravity
-                )
-
-                SensorManager.getOrientation(outGravity, values)
-
+        val sensor = manager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+        val sListener = object : SensorEventListener {
+            override fun onSensorChanged(sEvent: SensorEvent?) {
+                val value = sEvent?.values
                 progressBar = findViewById(R.id.water)
-                var y = values[1] *  57.29577951308
-                var z = values[0] *  57.29577951308
-                var x = (values[2] * (-57.29577951308)).toFloat()
-                if (y>76) x=0f
-                if (x>-13 && x<13) {
-                    binding.textView.text = x.toString()
-                    progressBar?.rotation = x
+                var s = value?.get(0)
+                if(value?.get(2)!! <-30 ) s = 10f
+                if (s != null && s>-15 && s<25) {
+                    progressBar?.rotation = (-s+10)
                 }
             }
-
-
-            override fun onAccuracyChanged(event: Sensor?, p1: Int) {
+            override fun onAccuracyChanged(sEvent: Sensor?, p1: Int) {
 
             }
         }
-        manager.registerListener(sListener, magnet, SensorManager.SENSOR_DELAY_FASTEST)
-        manager.registerListener(sListener, accel, SensorManager.SENSOR_DELAY_FASTEST)
+        manager.registerListener(sListener, sensor, SensorManager.SENSOR_DELAY_GAME)
+    }
+    private fun createAlert(){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Enter a glass size")
+        builder.setMessage("Glass size")
+        builder.setNeutralButton("100 ml") {dialogInterface, i ->
+            glass = 100
+            saveGlass(glass)
+            dataModel.glass.value = glass
+        }
+        builder.setNegativeButton("250 ml") {dialogInterface, i ->
+            glass = 250
+            saveGlass(glass)
+            dataModel.glass.value = glass
+        }
+        builder.setPositiveButton("300 ml") {dialogInterface, i ->
+            glass = 300
+            saveGlass(glass)
+            dataModel.glass.value = glass
+        }
+        builder.show()
+    }
 
+    fun size(view: View){
+        createAlert()
     }
 
     fun next(view: View){
 
-        dayDrinked = 0
+        dayDrunk = 0
         dayProgress = 0
-        saveWater(dayDrinked)
+        saveWater(dayDrunk)
         savePercent(dayProgress)
-        dataModel.progress.value = dayDrinked
+        dataModel.progress.value = dayDrunk
         dataModel.percent.value = dayProgress
     }
 
@@ -145,6 +149,7 @@ private lateinit var binding: ActivityMainBinding
         editor?.apply()
 
     }
+
     fun saveWater(res: Int){
         //сохранение в файле
         val editor = pref?.edit()
@@ -152,10 +157,19 @@ private lateinit var binding: ActivityMainBinding
         editor?.apply()
 
     }
+
     fun savePercent(res: Int){
         //сохранение в файле
         val editor = pref?.edit()
         editor?.putInt("percent", res)
+        editor?.apply()
+
+    }
+
+    fun saveGlass(res: Int){
+        //сохранение в файле
+        val editor = pref?.edit()
+        editor?.putInt("glass", res)
         editor?.apply()
 
     }

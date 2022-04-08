@@ -11,14 +11,14 @@
     <ProgressBar
         android:id="@+id/water"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="701dp"
-        android:layout_height="724dp"
+        android:layout_width="653dp"
+        android:layout_height="728dp"
         android:progressDrawable="@drawable/progress"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ic_water"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.333" />
 
     <TextView
         android:id="@+id/ic_water"
@@ -84,5 +84,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.837" />
+
+    <Button
+        android:id="@+id/size"
+        android:layout_width="59dp"
+        android:layout_height="63dp"
+        android:onClick="size"
+        app:icon="@drawable/ic_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.589" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

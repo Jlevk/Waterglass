@@ -21,10 +21,11 @@ class WaterFragment : Fragment() {
     private val dataModel: DataModel by activityViewModels()
 
     var weight = 0
-    var dayDrinked = 0
+    var dayDrunk = 0
     var dayProgress = 0
     var progressAnim = 0
     var glass = 250
+    var dayWater = 0
 
     var progressBar: ProgressBar? = null
 
@@ -49,8 +50,13 @@ class WaterFragment : Fragment() {
 
         dataModel.progress.observe(activity as LifecycleOwner) {
 
-            dayDrinked= it
-            water.text = "Drunk water: $dayDrinked ml"
+            dayDrunk= it
+            water.text = "Drunk water: $dayDrunk ml"
+
+        }
+        dataModel.glass.observe(activity as LifecycleOwner) {
+
+            glass= it
 
         }
         dataModel.percent.observe(activity as LifecycleOwner) {
@@ -63,7 +69,6 @@ class WaterFragment : Fragment() {
             ObjectAnimator.ofInt(progressBar, "progress", progressAnim)
                 .setDuration(2000)
                 .start()
-
         }
 
         dataModel.weightValue.observe(activity as LifecycleOwner) {
@@ -72,26 +77,26 @@ class WaterFragment : Fragment() {
         }
 
         button.setOnClickListener {
-            var dayWater = (weight * 31)
 
-            if (dayDrinked == 0) {
+            dayWater = (weight * 31)
 
-                dayDrinked = glass
-                dataModel.progress.value = dayDrinked
+            if (dayDrunk == 0) {
+
+                dayDrunk = glass
+                dataModel.progress.value = dayDrunk
             }
             else {
 
-                dayDrinked += glass
-                dataModel.progress.value = dayDrinked
+                dayDrunk += glass
+                dataModel.progress.value = dayDrunk
             }
-                dayProgress = (dayDrinked*100 / dayWater)
-                dataModel.percent.value = dayProgress
+            dayProgress = (dayDrunk*100 / dayWater)
+            dataModel.percent.value = dayProgress
 
-                water.text = "Drunk water: $dayDrinked ml"
-                percent.text = "Progress: $dayProgress %"
-
+            water.text = "Drunk water: $dayDrunk ml"
+            percent.text = "Progress: $dayProgress %"
         }
-        //добавить визуализацию прогресса
+
     }
 
     override fun onDestroyView() {
@@ -99,7 +104,5 @@ class WaterFragment : Fragment() {
         _binding = null
     }
 }
-
-
 
 

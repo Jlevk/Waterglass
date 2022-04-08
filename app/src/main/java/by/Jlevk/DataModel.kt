@@ -13,5 +13,7 @@ open class DataModel: ViewModel() {
     val percent: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>()
     }
-
+    val glass: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
 }
