@@ -1,6 +1,8 @@
 package by.Jlevk
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -12,7 +14,10 @@ import android.widget.ProgressBar
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
+import by.Jlevk.WaterApp.Companion.CHANNEL_ID
 import by.Jlevk.databinding.ActivityMainBinding
 import by.Jlevk.fragments.SettingsFragment
 import by.Jlevk.fragments.WaterFragment
@@ -32,6 +37,8 @@ class MainActivity : AppCompatActivity() {
     var glass = 0
 
     private lateinit var binding: ActivityMainBinding
+
+    var builder = NotificationCompat.Builder(this, CHANNEL_ID)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,19 +111,34 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+
         manager.registerListener(sListener, sensor, SensorManager.SENSOR_DELAY_GAME)
+
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_water)
+            .setContentTitle("Water Glass")
+            .setContentText("Time to drink a little bit water!")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+
+
     }
     private fun createAlert(){
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Enter a glass size")
         builder.setMessage("Glass size")
-        builder.setNeutralButton("100 ml") {dialogInterface, i ->
-            glass = 100
+        builder.setNeutralButton(" return to standard (250 ml)") {dialogInterface, i ->
+            glass = 250
             saveGlass(glass)
             dataModel.glass.value = glass
         }
-        builder.setNegativeButton("250 ml") {dialogInterface, i ->
-            glass = 250
+        builder.setNegativeButton("100 ml") {dialogInterface, i ->
+            glass = 100
             saveGlass(glass)
             dataModel.glass.value = glass
         }
@@ -179,6 +201,15 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, fragment)
         transaction.commit()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        with(NotificationManagerCompat.from(this)) {
+            // notificationId is a unique int for each notification that you must define
+            val notificationId = 1
+            notify(notificationId, builder.build())
+        }
     }
 
 }

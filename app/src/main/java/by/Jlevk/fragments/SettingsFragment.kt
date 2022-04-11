@@ -35,7 +35,7 @@ class SettingsFragment : Fragment() {
         var weightValue: TextView = binding.weightValue
         var num: NumberPicker = binding.numberPicker
 
-        num.minValue = 0
+        num.minValue = 1
         num.maxValue = 400
         num.wrapSelectorWheel = false
 
