@@ -10,10 +10,12 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ProgressBar
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
@@ -22,6 +24,7 @@ import by.Jlevk.databinding.ActivityMainBinding
 import by.Jlevk.fragments.SettingsFragment
 import by.Jlevk.fragments.WaterFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,15 +39,43 @@ class MainActivity : AppCompatActivity() {
     var dayDrunk = 0
     var glass = 0
 
+    lateinit var dataHelper: DataHelper
+
+    private val timer = Timer()
+
     private lateinit var binding: ActivityMainBinding
 
     var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+
+    var startButton: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        dataHelper = DataHelper(applicationContext)
+
+        binding.drink2.setOnClickListener{ startStopAction() }
+        binding.resetButton.setOnClickListener{ resetAction() }
+
+
+        if(dataHelper.timerCounting())
+        {
+            startTimer()
+        }
+        else
+        {
+            stopTimer()
+            if(dataHelper.startTime() != null && dataHelper.stopTime() != null)
+            {
+                val time = Date().time - calcRestartTime().time
+                binding.timeTV.text = timeStringFromLong(time)
+            }
+        }
+
+        timer.scheduleAtFixedRate(TimeTask(), 0, 500)
 
         supportFragmentManager.beginTransaction()
             .add(R.id.fragment_container, WaterFragment())
@@ -62,7 +93,7 @@ class MainActivity : AppCompatActivity() {
         dataModel.weightValue.observe(this) {
 
             weight = it
-            binding.textView.text = weight.toString()
+
             saveData(weight)
 
         }
@@ -114,6 +145,10 @@ class MainActivity : AppCompatActivity() {
 
         manager.registerListener(sListener, sensor, SensorManager.SENSOR_DELAY_GAME)
 
+
+    }
+
+    private fun not(){
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -126,8 +161,19 @@ class MainActivity : AppCompatActivity() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
 
-
     }
+    private inner class TimeTask: TimerTask()
+    {
+        override fun run()
+        {
+            if(dataHelper.timerCounting())
+            {
+                val time = Date().time - dataHelper.startTime()!!.time
+                binding.timeTV.text = timeStringFromLong(time)
+            }
+        }
+    }
+
     private fun createAlert(){
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Enter a glass size")
@@ -148,6 +194,70 @@ class MainActivity : AppCompatActivity() {
             dataModel.glass.value = glass
         }
         builder.show()
+    }
+    private fun resetAction()
+    {
+        dataHelper.setStopTime(null)
+        dataHelper.setStartTime(null)
+        stopTimer()
+        binding.timeTV.text = timeStringFromLong(0)
+    }
+
+    private fun stopTimer()
+    {
+        dataHelper.setTimerCounting(false)
+        binding.drink2.text = getString(R.string.start)
+    }
+
+    private fun startTimer()
+    {
+        dataHelper.setTimerCounting(true)
+        binding.drink2.text = getString(R.string.stop)
+    }
+
+    private fun startStopAction()
+    {
+        if(dataHelper.timerCounting())
+        {
+            dataHelper.setStopTime(Date())
+            stopTimer()
+        }
+        else
+        {
+            if(dataHelper.stopTime() != null)
+            {
+                dataHelper.setStartTime(calcRestartTime())
+                dataHelper.setStopTime(null)
+            }
+            else
+            {
+                dataHelper.setStartTime(Date())
+            }
+            startTimer()
+        }
+    }
+
+    private fun calcRestartTime(): Date
+    {
+        val diff = dataHelper.startTime()!!.time - dataHelper.stopTime()!!.time
+        return Date(System.currentTimeMillis() + diff)
+    }
+
+    private fun timeStringFromLong(ms: Long): String {
+        val seconds = (ms / 1000) % 60
+        val minutes = (ms / (1000 * 60) % 60)
+        val hours = (ms / (1000 * 60 * 60) % 24)
+        if (seconds.toInt() == 10) {
+            not()
+            notifyCall()
+        }
+
+        return makeTimeString(hours, minutes, seconds)
+    }
+
+    private fun makeTimeString(hours: Long, minutes: Long, seconds: Long): String
+    {
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
     fun size(view: View){
@@ -202,9 +312,7 @@ class MainActivity : AppCompatActivity() {
         transaction.replace(R.id.fragment_container, fragment)
         transaction.commit()
     }
-
-    override fun onPause() {
-        super.onPause()
+    fun notifyCall(){
         with(NotificationManagerCompat.from(this)) {
             // notificationId is a unique int for each notification that you must define
             val notificationId = 1
