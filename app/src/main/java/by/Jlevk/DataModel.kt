@@ -16,4 +16,10 @@ open class DataModel: ViewModel() {
     val glass: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>()
     }
+    val heightValue: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
+    val index: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
 }

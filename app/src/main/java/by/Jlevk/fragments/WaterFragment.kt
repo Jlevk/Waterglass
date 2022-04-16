@@ -1,6 +1,7 @@
 package by.Jlevk.fragments
 
 import android.animation.ObjectAnimator
+import android.graphics.Color
 import  android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,10 +10,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import by.Jlevk.DataModel
 import by.Jlevk.databinding.FragmentWaterBinding
+import com.google.android.material.snackbar.Snackbar
 
 class WaterFragment : Fragment() {
 
@@ -21,6 +24,7 @@ class WaterFragment : Fragment() {
     private val dataModel: DataModel by activityViewModels()
 
     var weight = 0
+    var height = 0
     var dayDrunk = 0
     var dayProgress = 0
     var progressAnim = 0
@@ -47,6 +51,7 @@ class WaterFragment : Fragment() {
         var percent: TextView = binding.percent
         var water: TextView = binding.dayWater
         var button: Button = binding.drink
+        var size: Button = binding.size
 
         dataModel.progress.observe(activity as LifecycleOwner) {
 
@@ -76,27 +81,68 @@ class WaterFragment : Fragment() {
             weight = it
         }
 
+
         button.setOnClickListener {
-
-            dayWater = (weight * 31)
-
-            if (dayDrunk == 0) {
-
-                dayDrunk = glass
-                dataModel.progress.value = dayDrunk
-            }
+            if (weight == 0) onSNACK(view)
             else {
 
-                dayDrunk += glass
-                dataModel.progress.value = dayDrunk
-            }
-            dayProgress = (dayDrunk*100 / dayWater)
-            dataModel.percent.value = dayProgress
+                dayWater = (weight * 31)
 
-            water.text = "Drunk water: $dayDrunk ml"
-            percent.text = "Progress: $dayProgress %"
+                if (dayDrunk == 0) {
+
+                    dayDrunk = glass
+                    dataModel.progress.value = dayDrunk
+                } else {
+
+                    dayDrunk += glass
+                    dataModel.progress.value = dayDrunk
+                }
+                dayProgress = (dayDrunk * 100 / dayWater)
+                dataModel.percent.value = dayProgress
+
+                water.text = "Drunk water: $dayDrunk ml"
+                percent.text = "Progress: $dayProgress %"
+            }
+        }
+        size.setOnClickListener {
+            createAlert()
+
         }
 
+
+    }
+    fun onSNACK(view: View){
+        //Snackbar(view)
+        val snackbar = Snackbar.make(view, "Please go to settings and pick your weight and height",
+            Snackbar.LENGTH_LONG).setAction("Action", null)
+        snackbar.setActionTextColor(Color.DKGRAY)
+        val snackbarView = snackbar.view
+        snackbarView.setBackgroundColor(Color.WHITE)
+        val textView =
+            snackbarView.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
+        textView.setTextColor(Color.BLACK)
+        textView.textSize = 14f
+        snackbar.show()
+    }
+
+
+    private fun createAlert(){
+        val builder = context?.let { AlertDialog.Builder(it) }
+        builder?.setTitle("Enter a glass size")
+        builder?.setMessage("Glass size")
+        builder?.setNeutralButton(" return to standard (250 ml)") {dialogInterface, i ->
+            glass = 250
+            dataModel.glass.value = glass
+        }
+        builder?.setNegativeButton("100 ml") {dialogInterface, i ->
+            glass = 100
+            dataModel.glass.value = glass
+        }
+        builder?.setPositiveButton("300 ml") {dialogInterface, i ->
+            glass = 300
+            dataModel.glass.value = glass
+        }
+        builder?.show()
     }
 
     override fun onDestroyView() {

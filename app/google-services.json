@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "388286267127",
+    "project_id": "water-glass",
+    "storage_bucket": "water-glass.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388286267127:android:7e4360ff883cf9daef1df2",
+        "android_client_info": {
+          "package_name": "by.Jlevk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388286267127-o03v88gkhmoo8a8gitb4kcgmijqf1lk0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBo83vz4jXFdcWi6JUiFNAa8Lek4nJ57_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388286267127-o03v88gkhmoo8a8gitb4kcgmijqf1lk0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

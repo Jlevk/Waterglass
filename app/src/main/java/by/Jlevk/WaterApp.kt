@@ -1,10 +1,10 @@
 package by.Jlevk
-
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import by.Jlevk.R
 
 class WaterApp : Application() {
     override fun onCreate() {

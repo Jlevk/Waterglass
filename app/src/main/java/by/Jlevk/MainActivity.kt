@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -12,18 +13,23 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.getColor
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.fragment.app.Fragment
 import by.Jlevk.WaterApp.Companion.CHANNEL_ID
 import by.Jlevk.databinding.ActivityMainBinding
 import by.Jlevk.fragments.SettingsFragment
 import by.Jlevk.fragments.WaterFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.color.MaterialColors.getColor
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -35,9 +41,11 @@ class MainActivity : AppCompatActivity() {
     var progressBar: ProgressBar? = null
 
     var weight = 0
+    var height = 0
+    var index = 0
     var dayProgress = 0
     var dayDrunk = 0
-    var glass = 0
+    var glass = 250
 
     lateinit var dataHelper: DataHelper
 
@@ -46,8 +54,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     var builder = NotificationCompat.Builder(this, CHANNEL_ID)
-
-    var startButton: Button? = null
+    var drink: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,9 +64,8 @@ class MainActivity : AppCompatActivity() {
 
         dataHelper = DataHelper(applicationContext)
 
-        binding.drink2.setOnClickListener{ startStopAction() }
-        binding.resetButton.setOnClickListener{ resetAction() }
-
+        drink= findViewById(R.id.drink)
+        drink?.setOnClickListener{ startStopAction() }
 
         if(dataHelper.timerCounting())
         {
@@ -93,8 +99,19 @@ class MainActivity : AppCompatActivity() {
         dataModel.weightValue.observe(this) {
 
             weight = it
+            saveWeight(weight)
 
-            saveData(weight)
+        }
+        dataModel.heightValue.observe(this) {
+
+            height = it
+            saveHeight(height)
+
+        }
+        dataModel.index.observe(this) {
+
+            index = it
+            saveIndex(index)
 
         }
         dataModel.progress.observe(this) {
@@ -117,11 +134,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         weight=pref?.getInt("weight",0)!!
+        height=pref?.getInt("height",0)!!
+        index=pref?.getInt("index",0)!!
         dayDrunk=pref?.getInt("water",0)!!
         dayProgress=pref?.getInt("percent",0)!!
-        glass=pref?.getInt("glass",0)!!
+        glass = if(glass==0)
+            pref?.getInt("glass",0)!!
+        else 250
 
         dataModel.weightValue.value = weight
+        dataModel.heightValue.value = height
+        dataModel.index.value = index
         dataModel.progress.value = dayDrunk
         dataModel.percent.value = dayProgress
         dataModel.glass.value = glass
@@ -145,14 +168,14 @@ class MainActivity : AppCompatActivity() {
 
         manager.registerListener(sListener, sensor, SensorManager.SENSOR_DELAY_GAME)
 
-
     }
 
     private fun not(){
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+            this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_water)
@@ -174,27 +197,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun createAlert(){
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Enter a glass size")
-        builder.setMessage("Glass size")
-        builder.setNeutralButton(" return to standard (250 ml)") {dialogInterface, i ->
-            glass = 250
-            saveGlass(glass)
-            dataModel.glass.value = glass
-        }
-        builder.setNegativeButton("100 ml") {dialogInterface, i ->
-            glass = 100
-            saveGlass(glass)
-            dataModel.glass.value = glass
-        }
-        builder.setPositiveButton("300 ml") {dialogInterface, i ->
-            glass = 300
-            saveGlass(glass)
-            dataModel.glass.value = glass
-        }
-        builder.show()
-    }
+
     private fun resetAction()
     {
         dataHelper.setStopTime(null)
@@ -206,13 +209,13 @@ class MainActivity : AppCompatActivity() {
     private fun stopTimer()
     {
         dataHelper.setTimerCounting(false)
-        binding.drink2.text = getString(R.string.start)
+
     }
 
     private fun startTimer()
     {
         dataHelper.setTimerCounting(true)
-        binding.drink2.text = getString(R.string.stop)
+
     }
 
     private fun startStopAction()
@@ -260,10 +263,6 @@ class MainActivity : AppCompatActivity() {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
-    fun size(view: View){
-        createAlert()
-    }
-
     fun next(view: View){
 
         dayDrunk = 0
@@ -274,10 +273,24 @@ class MainActivity : AppCompatActivity() {
         dataModel.percent.value = dayProgress
     }
 
-    fun saveData(res: Int){
+    fun saveWeight(res: Int){
         //сохранение в файле
         val editor = pref?.edit()
         editor?.putInt("weight", res)
+        editor?.apply()
+
+    }
+    fun saveHeight(res: Int){
+        //сохранение в файле
+        val editor = pref?.edit()
+        editor?.putInt("height", res)
+        editor?.apply()
+
+    }
+    fun saveIndex(res: Int){
+        //сохранение в файле
+        val editor = pref?.edit()
+        editor?.putInt("index", res)
         editor?.apply()
 
     }
