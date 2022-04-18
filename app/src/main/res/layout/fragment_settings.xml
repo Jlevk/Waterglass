@@ -9,18 +9,6 @@
     <!-- TODO: Update blank fragment layout -->
 
     <TextView
-        android:id="@+id/height"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        app:layout_constraintBottom_toTopOf="@+id/numberPicker2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
-        app:layout_constraintStart_toEndOf="@+id/weightValue"
-        app:layout_constraintTop_toTopOf="@+id/ic_settings"
-        app:layout_constraintVertical_bias="0.726" />
-
-    <TextView
         android:id="@+id/ic_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,13 +24,28 @@
         android:id="@+id/weightValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0"
-        app:layout_constraintBottom_toTopOf="@+id/numberPicker"
+        android:text="Your weight: "
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.183"
+        app:layout_constraintHorizontal_bias="0.235"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ic_settings"
-        app:layout_constraintVertical_bias="0.726" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.199"/>
+
+
+    <TextView
+        android:id="@+id/height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your height: "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.773"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.199" />
+
+
 
     <NumberPicker
         android:id="@+id/numberPicker"
