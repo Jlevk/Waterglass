@@ -125,7 +125,6 @@ class WaterFragment : Fragment() {
         snackbar.show()
     }
 
-
     private fun createAlert(){
         val builder = context?.let { AlertDialog.Builder(it) }
         builder?.setTitle("Enter a glass size")

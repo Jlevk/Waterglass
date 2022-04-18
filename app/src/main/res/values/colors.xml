@@ -11,4 +11,13 @@
     <color  name = "colorPrimaryDark">#005cb2</color>
     <color name = "colorAccent">#6ab7ff</color>
 
+    <!-- /weight index -->/
+
+    <color name = "veryLow">#008B8B</color>
+    <color name = "low">#119e5a</color>
+    <color name = "normal">#119e30</color>
+    <color name = "high">#4a9e11</color>
+    <color name = "veryHigh">#c96c08</color>
+    <color name = "soHigh">#c94908</color>
+    <color name = "stopEat">#c93808</color>
 </resources>

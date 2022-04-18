@@ -1,5 +1,6 @@
 package by.Jlevk.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import by.Jlevk.DataModel
+import by.Jlevk.R
 import by.Jlevk.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
@@ -32,6 +34,7 @@ class SettingsFragment : Fragment() {
 
     }
 
+    @SuppressLint("ResourceAsColor")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         var weightValue: TextView = binding.weightValue
@@ -62,6 +65,16 @@ class SettingsFragment : Fragment() {
 
             index = it.toDouble()
             showIndex.text = index.toInt().toString()
+            when(index.toInt()){
+                1-> showIndex.setTextColor(R.color.veryLow)
+                16-> showIndex.setTextColor(R.color.low)
+                19-> showIndex.setTextColor(R.color.normal)
+                25-> showIndex.setTextColor(R.color.high)
+                30-> showIndex.setTextColor(R.color.veryHigh)
+                35-> showIndex.setTextColor(R.color.soHigh)
+                40-> showIndex.setTextColor(R.color.stopEat)
+            }
+
         }
 
 
@@ -71,6 +84,9 @@ class SettingsFragment : Fragment() {
             weightValue.text = "Your weight: $weight kg"
 
             dataModel.weightValue.value = weight
+            index = weight/((height*0.01)*(height*0.01))
+            showIndex.text = index.toInt().toString()
+            dataModel.index.value = index.toInt()
 
         }
         numHeight.setOnValueChangedListener { picker, oldVal, newVal ->
@@ -84,7 +100,6 @@ class SettingsFragment : Fragment() {
             dataModel.index.value = index.toInt()
 
         }
-
     }
 }
 
