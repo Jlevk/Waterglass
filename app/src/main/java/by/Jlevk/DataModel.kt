@@ -22,4 +22,8 @@ open class DataModel: ViewModel() {
     val index: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>()
     }
+    val indexRate: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
 }

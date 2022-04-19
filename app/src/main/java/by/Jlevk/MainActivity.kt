@@ -103,6 +103,7 @@ class MainActivity: AppCompatActivity()
             pref?.getInt("glass",0)!!
         else 250
 
+
         dataModel.weightValue.value = weight
         dataModel.heightValue.value = height
         dataModel.index.value = index
@@ -214,6 +215,7 @@ class MainActivity: AppCompatActivity()
         editor?.apply()
 
     }
+
 
     fun replaceFragment(fragment: Fragment) {
         //изменение экранов

@@ -11,4 +11,12 @@
     <string name="reset">Reset</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
+    <!-- rate -->
+    <string name = "veryLow">Oh! Your weight is so low, you should eat more</string>
+    <string name="low">Your weight is little bit low, time to snack</string>
+    <string name="normal">Your weight is ok, keep it up!</string>
+    <string name="high">Your weight is little bit high</string>
+    <string name="veryHigh">Your weight is higher than it should</string>
+    <string name="soHigh">Your weight is high, drink more water and balance your diet</string>
+
 </resources>

@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.WaterGlass" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name = "colorPrimary">#1e88e5</item>
+        <item name = "colorPrimaryDark">#005cb2</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>

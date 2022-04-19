@@ -43,21 +43,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.199" />
 
-    <Button
-        android:id="@+id/drink"
-        android:layout_width="153dp"
-        android:layout_height="78dp"
-        android:text="Drink!"
-
-        android:textColor="@color/white"
-        android:textSize="20dp"
-        app:icon="@drawable/ic_water"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.727" />
-
     <TextView
         android:id="@+id/percent"
         android:layout_width="wrap_content"
@@ -70,6 +55,32 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.199" />
 
+    <Button
+        android:id="@+id/drink"
+        android:layout_width="153dp"
+        android:layout_height="78dp"
+        android:text="Drink!"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:icon="@drawable/ic_water"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.727"
+        />
+
+    <Button
+        android:id="@+id/size"
+        android:layout_width="59dp"
+        android:layout_height="63dp"
+        android:onClick="size"
+        app:icon="@drawable/ic_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.589" />
 
     <Button
         android:id="@+id/next"
@@ -84,17 +95,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.837" />
-
-    <Button
-        android:id="@+id/size"
-        android:layout_width="59dp"
-        android:layout_height="63dp"
-        android:onClick="size"
-        app:icon="@drawable/ic_size"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.589" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

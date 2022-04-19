@@ -23,6 +23,7 @@ class SettingsFragment : Fragment() {
     var weight = 0
     var height = 0
     var index = 0.0
+    var rate: TextView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +35,6 @@ class SettingsFragment : Fragment() {
 
     }
 
-    @SuppressLint("ResourceAsColor")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         var weightValue: TextView = binding.weightValue
@@ -42,6 +42,8 @@ class SettingsFragment : Fragment() {
         var numWeight: NumberPicker = binding.numberPicker
         var numHeight: NumberPicker = binding.numberPicker2
         var showIndex: TextView = binding.index
+        rate = binding.rate2
+
 
         numWeight.minValue = 1
         numWeight.maxValue = 400
@@ -64,19 +66,20 @@ class SettingsFragment : Fragment() {
         dataModel.index.observe(activity as LifecycleOwner) {
 
             index = it.toDouble()
-            showIndex.text = index.toInt().toString()
             when(index.toInt()){
-                1-> showIndex.setTextColor(R.color.veryLow)
-                16-> showIndex.setTextColor(R.color.low)
-                19-> showIndex.setTextColor(R.color.normal)
-                25-> showIndex.setTextColor(R.color.high)
-                30-> showIndex.setTextColor(R.color.veryHigh)
-                35-> showIndex.setTextColor(R.color.soHigh)
-                40-> showIndex.setTextColor(R.color.stopEat)
+                1-> rate?.setText(R.string.veryLow)
+                16-> rate?.setText(R.string.low)
+                19-> rate?.setText(R.string.normal)
+                25-> rate?.setText(R.string.high)
+                30-> rate?.setText(R.string.veryHigh)
+                35-> rate?.setText(R.string.soHigh)
+                40-> rate?.setText(R.string.soHigh)
             }
 
-        }
+            showIndex.text = "Your weight index: ${index.toInt()} "
 
+
+        }
 
         numWeight.setOnValueChangedListener { picker, oldVal, newVal ->
 
@@ -101,6 +104,8 @@ class SettingsFragment : Fragment() {
 
         }
     }
+
 }
+
 
 
