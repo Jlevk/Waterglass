@@ -1,6 +1,5 @@
 package by.Jlevk.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +24,7 @@ class SettingsFragment : Fragment() {
     var index = 0.0
     var rate: TextView? = null
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,13 +37,13 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        rate = binding.rate
+
         var weightValue: TextView = binding.weightValue
         var heightValue: TextView = binding.height
         var numWeight: NumberPicker = binding.numberPicker
         var numHeight: NumberPicker = binding.numberPicker2
         var showIndex: TextView = binding.index
-        rate = binding.rate2
-
 
         numWeight.minValue = 1
         numWeight.maxValue = 400
@@ -79,9 +79,7 @@ class SettingsFragment : Fragment() {
             showIndex.text = "Your weight index: ${index.toInt()} "
 
 
-        }
-
-        numWeight.setOnValueChangedListener { picker, oldVal, newVal ->
+            numWeight.setOnValueChangedListener { picker, oldVal, newVal ->
 
             weight = newVal
             weightValue.text = "Your weight: $weight kg"
@@ -105,6 +103,7 @@ class SettingsFragment : Fragment() {
         }
     }
 
+}
 }
 
 

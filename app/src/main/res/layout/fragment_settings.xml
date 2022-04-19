@@ -20,6 +20,7 @@
         app:layout_constraintRight_toRightOf="parent"
         />
 
+
     <TextView
         android:id="@+id/weightValue"
         android:layout_width="wrap_content"
@@ -27,11 +28,10 @@
         android:text="Your weight: "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.235"
+        app:layout_constraintHorizontal_bias="0.184"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.199"/>
-
+        app:layout_constraintVertical_bias="0.199" />
 
     <TextView
         android:id="@+id/height"
@@ -54,9 +54,10 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.21"
+        app:layout_constraintHorizontal_bias="0.194"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.442" />
 
     <NumberPicker
         android:id="@+id/numberPicker2"
@@ -69,8 +70,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.782"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.442" />
 
+
+    <ImageView
+        android:id="@+id/lineSquare"
+        android:layout_width="371dp"
+        android:layout_height="105dp"
+        android:src="@drawable/ic_rec"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ic_settings"
+        app:layout_constraintVertical_bias="0.83" />
 
     <TextView
         android:id="@+id/index"
@@ -85,7 +98,7 @@
         app:layout_constraintVertical_bias="0.766" />
 
     <TextView
-        android:id="@+id/rate2"
+        android:id="@+id/rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -94,6 +107,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.83" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
