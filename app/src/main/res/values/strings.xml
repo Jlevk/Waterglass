@@ -19,4 +19,15 @@
     <string name="veryHigh">Your weight is higher than it should</string>
     <string name="soHigh">Your weight is high, drink more water and balance your diet</string>
 
+    <!-- rate -->
+    <string name = "tip1">Dont drink so cold water</string>
+    <string name="tip2">Drink water first then go to toilet, not vice versa</string>
+    <string name="tip3">Dont forgot about drinking</string>
+    <string name="tip4">Dont drink water right after eat</string>
+    <string name="tip5">Drink glass water before eat in 30 minutes</string>
+    <string name="tip6">Drink water slowly and in small sips</string>
+    <string name="tip7">At first it will be hard but i believe that you can</string>
+    <string name="tip8">If you are a sportsmen in training you need more water</string>
+    <string name="tip9">In warm water drink more water</string>
+
 </resources>

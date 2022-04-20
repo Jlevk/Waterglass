@@ -8,12 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import by.Jlevk.DataModel
+import by.Jlevk.R
 import by.Jlevk.databinding.FragmentWaterBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -32,6 +35,8 @@ class WaterFragment : Fragment() {
     var dayWater = 0
 
     var progressBar: ProgressBar? = null
+    var tip: TextView? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +51,19 @@ class WaterFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        tip = binding.tip
+
+        when((0..10).random()){
+            1-> tip?.setText(R.string.tip1)
+            2-> tip?.setText(R.string.tip2)
+            3-> tip?.setText(R.string.tip3)
+            4-> tip?.setText(R.string.tip4)
+            5-> tip?.setText(R.string.tip5)
+            6-> tip?.setText(R.string.tip6)
+            7-> tip?.setText(R.string.tip7)
+            8-> tip?.setText(R.string.tip8)
+            9-> tip?.setText(R.string.tip9)
+        }
 
         progressBar = binding.water
         var percent: TextView = binding.percent
@@ -68,6 +86,18 @@ class WaterFragment : Fragment() {
 
             dayProgress = it
             percent.text = "Progress: $dayProgress %"
+
+            var esterEgg: ImageView = binding.goal
+            var line: ImageView = binding.line
+
+            if(dayProgress>80){
+                esterEgg.isVisible = true
+                line.isVisible = true
+            }
+            else{
+                esterEgg.isVisible = false
+                line.isVisible = false
+            }
 
             progressAnim = dayProgress*10
             progressBar?.max = 1000
