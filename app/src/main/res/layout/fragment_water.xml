@@ -75,7 +75,7 @@
         android:layout_width="134dp"
         android:layout_height="72dp"
         android:onClick="size"
-        android:text="glas size"
+        android:text="glass size"
         app:icon="@drawable/ic_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
