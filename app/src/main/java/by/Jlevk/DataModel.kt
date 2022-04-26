@@ -1,6 +1,5 @@
 package by.Jlevk
 
-import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -22,9 +21,6 @@ open class DataModel: ViewModel() {
     }
     val index: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>()
-    }
-    val indexRate: MutableLiveData<TextView> by lazy {
-        MutableLiveData<TextView>()
     }
 
 }

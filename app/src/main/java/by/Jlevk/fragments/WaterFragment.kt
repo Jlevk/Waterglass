@@ -142,19 +142,7 @@ class WaterFragment : Fragment() {
 
 
     }
-    fun glass(view: View){
-        //Snackbar(view)
-        val snackbar = Snackbar.make(view, "You should pick glass size",
-            Snackbar.LENGTH_LONG).setAction("Action", null)
-        snackbar.setActionTextColor(Color.DKGRAY)
-        val snackbarView = snackbar.view
-        snackbarView.setBackgroundColor(Color.WHITE)
-        val textView =
-            snackbarView.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
-        textView.setTextColor(Color.BLACK)
-        textView.textSize = 14f
-        snackbar.show()
-    }
+
     fun onSNACK(view: View){
         //Snackbar(view)
         val snackbar = Snackbar.make(view, "Please go to settings and pick your weight and height",
